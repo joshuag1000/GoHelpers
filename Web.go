@@ -50,7 +50,7 @@ func StartWebServer(HTTPPort string, HTTPSPort string, OpenBrowserOnLoad bool) {
 		} else {
 			// begin https server
 			err_https := http.ListenAndServeTLS(":"+HTTPSPort, ExecPath+"/HTTPS-key/server.crt", ExecPath+"/HTTPS-key/server.key", nil)
-			Helper.OpenBrowser("https://localhost:" + HTTPSPort)
+			OpenBrowser("https://localhost:" + HTTPSPort)
 			if err_https != nil {
 				log.Fatal("Web server (HTTPS): \n", err_https)
 			}
@@ -59,7 +59,7 @@ func StartWebServer(HTTPPort string, HTTPSPort string, OpenBrowserOnLoad bool) {
 
 	// begin http server
 	err_http := http.ListenAndServe(":"+HTTPPort, nil)
-	Helper.OpenBrowser("http://localhost:" + HTTPPort)
+	OpenBrowser("http://localhost:" + HTTPPort)
 	if err_http != nil {
 		log.Fatal("Web server (HTTP): ", err_http)
 	}
