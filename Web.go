@@ -36,7 +36,7 @@ import (
 )
 
 //Starts http and https Web server
-func StartWebServer(HTTPPort string, HTTPSPort string, OpenBrowserOnLoad bool) {
+func StartWebServer(HTTPPort string, HTTPSPort string, OpenBrowserOnLoad bool, handler http.Handler) {
 	ExecPath, err2 := filepath.Abs(filepath.Dir(os.Args[0]))
 	if err2 != nil {
 		log.Fatal(err2)
@@ -49,7 +49,7 @@ func StartWebServer(HTTPPort string, HTTPSPort string, OpenBrowserOnLoad bool) {
 			fmt.Printf("server.key does not exist. HTTPS NOT STARTED\n")
 		} else {
 			// begin https server
-			err_https := http.ListenAndServeTLS(":"+HTTPSPort, ExecPath+"/HTTPS-key/server.crt", ExecPath+"/HTTPS-key/server.key", nil)
+			err_https := http.ListenAndServeTLS(":"+HTTPSPort, ExecPath+"/HTTPS-key/server.crt", ExecPath+"/HTTPS-key/server.key", handler)
 			if OpenBrowserOnLoad == true {
 				OpenBrowser("http://localhost:" + HTTPSPort)
 			}
@@ -60,7 +60,7 @@ func StartWebServer(HTTPPort string, HTTPSPort string, OpenBrowserOnLoad bool) {
 	}()
 
 	// begin http server
-	err_http := http.ListenAndServe(":"+HTTPPort, nil)
+	err_http := http.ListenAndServe(":"+HTTPPort, handler)
 	if OpenBrowserOnLoad == true {
 		OpenBrowser("http://localhost:" + HTTPPort)
 	}
