@@ -25,7 +25,6 @@ SOFTWARE.
 package GoHelpers
 
 import (
-	"fmt"
 	"log"
 	"net"
 	"net/http"
@@ -44,9 +43,9 @@ func StartWebServer(HTTPPort string, HTTPSPort string, OpenBrowserOnLoad bool, h
 	go func() {
 		// check for https certificates
 		if _, err := os.Stat(ExecPath + "/HTTPS-key/server.crt"); os.IsNotExist(err) {
-			fmt.Printf("server.crt does not exist. HTTPS NOT STARTED\n")
+			log.Printf("server.crt does not exist. HTTPS NOT STARTED\n")
 		} else if _, err := os.Stat(ExecPath + "/HTTPS-key/server.key"); os.IsNotExist(err) {
-			fmt.Printf("server.key does not exist. HTTPS NOT STARTED\n")
+			log.Printf("server.key does not exist. HTTPS NOT STARTED\n")
 		} else {
 			// begin https server
 			err_https := http.ListenAndServeTLS(":"+HTTPSPort, ExecPath+"/HTTPS-key/server.crt", ExecPath+"/HTTPS-key/server.key", handler)
@@ -80,7 +79,7 @@ func OpenBrowser(url string) {
 	case "darwin":
 		err = exec.Command("open", url).Start()
 	default:
-		err = fmt.Errorf("unsupported platform")
+		err = log.Errorf("unsupported platform")
 	}
 	if err != nil {
 		log.Fatal(err)
